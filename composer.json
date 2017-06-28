@@ -1,0 +1,16 @@
+{
+    "name": "awecms/awecms",
+    "description": "An awesome CMS framework",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jens Laur",
+            "email": "jens@laur.me"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/psr7": "^1.4"
+    }
+}
