@@ -30,7 +30,7 @@ class Request {
         $this->protocol = $protocol;
         $res = parse_url($this->getUri());
         $this->path = $res["path"];
-        $this->query = $res["query"];
+        $this->query = $res["query"] ?? null;
 
     }
 

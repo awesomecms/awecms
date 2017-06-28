@@ -11,31 +11,31 @@ namespace modules\frontend;
 
 use awecms\module\RestModule;
 use awecms\router\Request;
-use modules\frontend\models\ArticleModel;
+use awecms\router\Response;
+use modules\frontend\models\Article;
 
 class Module extends RestModule {
 
     public $slug = "/frontend/{id}";
 
-
-    public function doGet(Request $request)
+    public function doGet(Request $request, Response $response): Response
     {
-        $artice = new ArticleModel();
+        $response->setType(Response::TYPE_JSON)->setBody(array(array("yolo"=>"test"),array("yolo"=>"test")));
+        return $response;
     }
 
-    public function doPost(Request $request)
+    public function doPost(Request $request, Response $response): Response
     {
-        echo $request->getMethod()." ". $this->slug;
-        var_dump($request->getAttributes());
+        // TODO: Implement doPost() method.
     }
 
-    public function doPut(Request $request)
+    public function doPut(Request $request, Response $response): Response
     {
-        echo $request->getMethod()." ". $this->slug;
+        // TODO: Implement doPut() method.
     }
 
-    public function doDelete(Request $request)
+    public function doDelete(Request $request, Response $response): Response
     {
-        echo $request->getMethod()." ". $this->slug;
+        // TODO: Implement doDelete() method.
     }
 }

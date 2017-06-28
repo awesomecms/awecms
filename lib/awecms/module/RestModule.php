@@ -11,6 +11,7 @@ namespace awecms\module;
 
 use awecms\App;
 use awecms\router\Request;
+use awecms\router\Response;
 
 abstract class RestModule extends Module
 {
@@ -26,13 +27,13 @@ abstract class RestModule extends Module
         $this->app->router->delete($this->slug, (array($this,"doDelete")));
     }
 
-    abstract public function doGet(Request $request);
+    abstract public function doGet(Request $request,Response $response):Response;
 
-    abstract public function doPost(Request $request);
+    abstract public function doPost(Request $request,Response $response):Response;
 
-    abstract public function doPut(Request $request);
+    abstract public function doPut(Request $request,Response $response):Response;
 
-    abstract public function doDelete(Request $request);
+    abstract public function doDelete(Request $request,Response $response):Response;
 
 
 }

@@ -46,18 +46,20 @@ class Router
         $this->routes[strtoupper($method)][$pattern] = $callback;
     }
 
-    public function execute(Request $url)
+    public function execute(Request $url):Response
     {
+        $response = new Response();
         foreach ($this->routes[$url->getMethod()] as $pattern => $callback) {
             $attr = $this->matchPattern($pattern, $url);
             if ($attr != false) {
                 if(!is_bool($attr)) {
                     $url->setAttributes($attr);
                 }
-                return $callback($url);
+                return $callback($url,$response);
             }
         }
-        return false;
+        $response->setStatus(404);
+        return $response;
     }
 
     private function matchPattern($pattern, Request $url)

@@ -5,17 +5,8 @@
  * Date: 27.06.17
  * Time: 23:47
  */
+ini_set("display_errors",'1');
+require "init.php";
+$article = new \modules\frontend\models\Article("59543981dda30");
 
-$re = '/\{(.*)\}/U';
-$str = '/test/{test}/{lol}';
-$str2 = '/test/asasas';
-
-preg_replace($re, "(.*)", $str);
-
-// Print the entire match result
-$pattern = (preg_replace($re, "(?<$1>(.*))", $str));
-$pattern = str_replace("/","\\/",$pattern);
-var_dump($pattern);
-var_dump(preg_match("/".$pattern."/", $str2,$math));
-
-var_dump($math);
+var_dump($article);

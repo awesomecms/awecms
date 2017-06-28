@@ -40,7 +40,8 @@ class App
     }
 
     public function run(){
-        $this->router->execute(Request::fromCurrentRequest());
+        $response = $this->router->execute(Request::fromCurrentRequest());
+        $response->send();
     }
 
     private function loadConfig($config_url)
