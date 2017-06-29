@@ -123,4 +123,9 @@ class Request {
     {
         return $this->attributes;
     }
+
+    public function getDecodedBody()
+    {
+        return json_decode($this->body,true);
+    }
 }

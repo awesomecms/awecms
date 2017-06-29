@@ -118,7 +118,7 @@ abstract class Model {
         return $list;
     }
 
-    private function fromArray($model){
+    public function fromArray($model){
 
         foreach ($model as $k => $v){
             $this->{$k} = $v;

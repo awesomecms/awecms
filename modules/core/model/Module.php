@@ -59,17 +59,38 @@ class Module extends RestModule {
 
     public function doPost(Request $request, Response $response): Response
     {
-        // TODO: Implement doPost() method.
+        /**
+         * @var $model Model
+         */
+        $model = new $this->mapping[$model](null);
+        $model->fromArray($request->getDecodedBody());
+        $model->persist();
+        return $response->setType(Response::TYPE_JSON)->setBody($model);
     }
 
     public function doPut(Request $request, Response $response): Response
     {
-        // TODO: Implement doPut() method.
+        if(isset($request->getAttributes()["id"]) && $request->getAttributes()["id"]!=""){
+            /**
+             * @var $model Model
+             */
+            $model = new $this->mapping[$model]($request->getAttributes()["id"]);
+            $model->fromArray($request->getDecodedBody());
+            $model->persist();
+            return $response->setType(Response::TYPE_JSON)->setBody($model);
+        }
     }
 
     public function doDelete(Request $request, Response $response): Response
     {
-        // TODO: Implement doDelete() method.
+        if(isset($request->getAttributes()["id"]) && $request->getAttributes()["id"]!=""){
+            /**
+             * @var $model Model
+             */
+            $model = new $this->mapping[$model]($request->getAttributes()["id"]);
+            $model->delete();
+            return $response->setType(Response::TYPE_JSON)->setBody(array("msg"=>"success"));
+        }
     }
 
     private function checkModel(Request $request) {

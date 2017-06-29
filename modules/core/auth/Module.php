@@ -19,7 +19,6 @@ class Module extends APIModule{
     function __construct(App $app)
     {
         parent::__construct($app);
-
         $this->app->router->get($this->slug."/login",array($this,"login"));
     }
 
