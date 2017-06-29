@@ -13,6 +13,11 @@ use awecms\App;
 use awecms\router\Request;
 use awecms\router\Response;
 
+/**
+ * Class RestModule
+ * Variation of the APIModule which provides a REST-like interface
+ * @package awecms\module
+ */
 abstract class RestModule extends APIModule
 {
 

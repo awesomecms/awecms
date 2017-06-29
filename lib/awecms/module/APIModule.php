@@ -13,6 +13,11 @@ use awecms\App;
 use awecms\router\Request;
 use awecms\router\Response;
 
+/**
+ * Class APIModule
+ * Variation of the base module, which prefixs every child module with /api
+ * @package awecms\module
+ */
 abstract class APIModule extends Module
 {
 

@@ -6,8 +6,7 @@
  * Time: 18:48
  */
 
-namespace modules\core\model;
-
+namespace awecms\core\model;
 
 use awecms\App;
 use awecms\model\Model;
@@ -15,7 +14,8 @@ use awecms\module\RestModule;
 use awecms\router\Request;
 use awecms\router\Response;
 
-class Module extends RestModule {
+class Module extends RestModule
+{
 
     public $slug = "/model/{model}/{id}";
     private $mapping;
@@ -26,7 +26,8 @@ class Module extends RestModule {
 
     }
 
-    public function initialize(){
+    public function initialize()
+    {
         $this->mapping = array();
         foreach ($this->app->getModels() as $model) {
             $class = new \ReflectionClass($model);
@@ -34,31 +35,53 @@ class Module extends RestModule {
         }
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function doGet(Request $request, Response $response): Response
     {
-        if(!$this->checkModel($request)){
-            return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error"=>"model not found"));
+
+        $json = [];
+        if ($request->getAttributes()["model"] == '_list') {
+            $json = array_keys($this->mapping);
+            return $response->setStatus(200)->setType(Response::TYPE_JSON)->setBody($json);
+
         }
-        $json =[];
+        if (!$this->checkModel($request)) {
+            return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
+        }
         $model = $request->getAttributes()["model"];
-        if(!isset($request->getAttributes()["id"]) || $request->getAttributes()["id"]==""){
-            $res = call_user_func(array($this->mapping[$model],"getAll"));
+        if (!isset($request->getAttributes()["id"]) || $request->getAttributes()["id"] == "") {
+            $res = call_user_func(array($this->mapping[$model], "getAll"));
             /**
              * @var $model Model
              */
-            foreach ($res as $model){
-                $json[] = array("id"=>$model->getId());
+            foreach ($res as $model) {
+                $json[] = array("id" => $model->getId());
             }
 
         } else {
             $json = new $this->mapping[$model]($request->getAttributes()["id"]);
         }
-        $response->setType(Response::TYPE_JSON)->setBody($json);
+        $response->setStatus(200)->setType(Response::TYPE_JSON)->setBody($json);
         return $response;
+    }
+
+    private function checkModel(Request $request)
+    {
+        if (!isset($this->mapping[$request->getAttributes()["model"]])) {
+            return false;
+        }
+        return true;
     }
 
     public function doPost(Request $request, Response $response): Response
     {
+        if (!$this->checkModel($request)) {
+            return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
+        }
         /**
          * @var $model Model
          */
@@ -70,7 +93,10 @@ class Module extends RestModule {
 
     public function doPut(Request $request, Response $response): Response
     {
-        if(isset($request->getAttributes()["id"]) && $request->getAttributes()["id"]!=""){
+        if (!$this->checkModel($request)) {
+            return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
+        }
+        if (isset($request->getAttributes()["id"]) && $request->getAttributes()["id"] != "") {
             /**
              * @var $model Model
              */
@@ -83,20 +109,16 @@ class Module extends RestModule {
 
     public function doDelete(Request $request, Response $response): Response
     {
-        if(isset($request->getAttributes()["id"]) && $request->getAttributes()["id"]!=""){
+        if (!$this->checkModel($request)) {
+            return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
+        }
+        if (isset($request->getAttributes()["id"]) && $request->getAttributes()["id"] != "") {
             /**
              * @var $model Model
              */
             $model = new $this->mapping[$model]($request->getAttributes()["id"]);
             $model->delete();
-            return $response->setType(Response::TYPE_JSON)->setBody(array("msg"=>"success"));
+            return $response->setType(Response::TYPE_JSON)->setBody(array("msg" => "success"));
         }
-    }
-
-    private function checkModel(Request $request) {
-        if(!isset($this->mapping[$request->getAttributes()["model"]])){
-            return false;
-        }
-        return true;
     }
 }

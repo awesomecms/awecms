@@ -8,7 +8,11 @@
 
 namespace awecms\util;
 
-
+/**
+ * Class Util
+ * Provides a whole lot of stuff, just like batmans utility belt
+ * @package awecms\util
+ */
 class Util
 {
 

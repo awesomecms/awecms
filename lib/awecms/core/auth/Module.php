@@ -1,5 +1,5 @@
 <?php
-namespace modules\core\auth;
+namespace awecms\core\auth;
 use awecms\App;
 use awecms\module\APIModule;
 use awecms\router\Request;

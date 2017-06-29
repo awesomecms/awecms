@@ -6,7 +6,7 @@
  * Time: 03:03
  */
 
-namespace modules\core\backend;
+namespace awecms\core\backend;
 
 
 use awecms\App;
@@ -22,7 +22,6 @@ class Module extends \awecms\module\Module
     public function __construct(App $app)
     {
         parent::__construct($app);
-        $this->app->loadModel("modules\\core\\models\\User");
         $this->app->router->get($this->slug,array($this,"index"));
     }
     public function index(Request $request, Response $response){

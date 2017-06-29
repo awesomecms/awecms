@@ -15,6 +15,11 @@ use awecms\util\Util;
 use ReflectionObject;
 use ReflectionProperty;
 
+/**
+ * Class Model
+ * Abstract class which provides a base model for interacting with StorageEngines
+ * @package awecms\model
+ */
 abstract class Model {
 
     public $id;
@@ -41,6 +46,38 @@ abstract class Model {
         return $engine;
     }
 
+    public function load()
+    {
+        $this->fromArray($this->storageEngine->getModel($this->id));
+    }
+
+    public function fromArray($model)
+    {
+
+        foreach ($model as $k => $v) {
+            $this->{$k} = $v;
+        }
+    }
+
+    public static function getAll()
+    {
+        $storageEngine = StorageEngine::getEngine(self::getEngine());
+        $class = new \ReflectionClass(get_called_class());
+        $storageEngine->schema = strtolower($class->getShortName());
+        $res = $storageEngine->query(array());
+        $list = [];
+        foreach ($res as $model) {
+            /**
+             * @var $m Model
+             */
+            $class = get_called_class();
+            $m = new $class();
+            $m->fromArray($model);
+            $list[] = $m;
+        }
+        return $list;
+    }
+
     public function persist(){
         if($this->createMode){
             $this->storageEngine->createModel($this->toArray());
@@ -50,12 +87,19 @@ abstract class Model {
 
     }
 
-    public function delete(){
-
+    public function toArray()
+    {
+        $res = [];
+        $fields = (new ReflectionObject($this))->getProperties(ReflectionProperty::IS_PUBLIC);
+        foreach ($fields as $field) {
+            $res[$field->getName()] = $field->getValue($this);
+        }
+        return $res;
     }
 
-    public function load(){
-        $this->fromArray($this->storageEngine->getModel($this->id));
+    public function delete(){
+        $this->storageEngine->deleteModel($this->toArray());
+
     }
 
     /**
@@ -64,6 +108,11 @@ abstract class Model {
     public function getId()
     {
         return $this->id;
+    }
+
+    public function toJSON()
+    {
+        return json_encode($this->toArray());
     }
 
     private function getFields(){
@@ -77,52 +126,6 @@ abstract class Model {
         }
 
         return $res;
-    }
-
-
-    public function toArray(){
-        $res = [];
-        $fields = (new ReflectionObject($this))->getProperties(ReflectionProperty::IS_PUBLIC);
-        foreach ($fields as $field) {
-            $res[$field->getName()] = $field->getValue($this);
-        }
-        return $res;
-    }
-
-    public function toJSON(){
-        return json_encode($this->toArray());
-    }
-
-    public static function findById(int $id){
-        $storageEngine = StorageEngine::getEngine(self::getEngine());
-        $class = new \ReflectionClass(get_called_class());
-        $storageEngine->schema = strtolower($class->getShortName());
-        $storageEngine->query(array("id"=>$id));
-    }
-
-    public static function getAll(){
-        $storageEngine = StorageEngine::getEngine(self::getEngine());
-        $class = new \ReflectionClass(get_called_class());
-        $storageEngine->schema = strtolower($class->getShortName());
-        $res = $storageEngine->query(array());
-        $list = [];
-        foreach ($res as $model){
-            /**
-             * @var $m Model
-             */
-            $class = get_called_class();
-            $m = new $class();
-            $m->fromArray($model);
-            $list[] = $m;
-        }
-        return $list;
-    }
-
-    public function fromArray($model){
-
-        foreach ($model as $k => $v){
-            $this->{$k} = $v;
-        }
     }
 
 

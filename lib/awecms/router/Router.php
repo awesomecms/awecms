@@ -9,8 +9,10 @@
 namespace awecms\router;
 
 
-use awecms\router\Request;
-
+/**
+ * Class Router
+ * @package awecms\router
+ */
 class Router
 {
     private $routes = array();
@@ -20,11 +22,14 @@ class Router
         $this->route("get",$pattern, $callback);
     }
 
+    public function route($method, $pattern, $callback)
+    {
+        $this->routes[strtoupper($method)][$pattern] = $callback;
+    }
 
     public function post($pattern, $callback){
         $this->route("post",$pattern, $callback);
     }
-
 
     public function put($pattern, $callback){
         $this->route("put",$pattern, $callback);
@@ -32,11 +37,6 @@ class Router
 
     public function delete($pattern, $callback){
         $this->route("delete",$pattern, $callback);
-    }
-
-    public function route($method,$pattern, $callback)
-    {
-        $this->routes[strtoupper($method)][$pattern] = $callback;
     }
 
     public function execute(Request $url):Response

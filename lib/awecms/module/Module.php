@@ -8,17 +8,26 @@
 
 namespace awecms\module;
 
+use awecms\acl\RoleManager;
 use awecms\App;
+use awecms\util\Util;
 
+/**
+ * Class Module
+ * BaseModule
+ * @package awecms\module
+ */
 abstract class Module {
 
-   public $slug;
+    public $slug;
 
-   protected $app;
+    protected $app;
+
     public function __construct(App $app) {
         $this->app = $app;
     }
 
     public function initialize(){}
+
 
 }

@@ -6,7 +6,7 @@
  * Time: 03:01
  */
 
-namespace modules\core\models;
+namespace awecms\core\models;
 
 
 use awecms\model\Model;
@@ -14,7 +14,7 @@ use awecms\model\Model;
 /**
  * Class User
  * @engine awecms\storage\FileStorageEngine
- * @package modules\core\models
+ * @package awecms\core\models
  */
 class User extends Model
 {

@@ -8,10 +8,16 @@
 
 namespace awecms;
 
+use awecms\core\models\User;
 use awecms\module\Module;
 use awecms\router\Request;
 use awecms\router\Router;
 
+/**
+ * Class App
+ * Main Class of aweCMS inits all modules and is the request entrypoint
+ * @package awecms
+ */
 class App
 {
     /**
@@ -27,26 +33,9 @@ class App
     {
         $this->loadConfig($config_url);
         $this->router = new Router();
-    }
+        //Load core modules
+        $this->loadModule("awecms\\core\\Module");
 
-
-    public function loadModule($modname){
-        /**
-         * @var $module Module
-         */
-        $module = new $modname($this);
-        $this->modules[$module->slug] = $module;
-    }
-
-    public function loadModel($model){
-        $this->models[] = $model;
-    }
-    public function run(){
-        // Run the initialze Module hook
-        $this->initialize();
-        // handle the request
-        $response = $this->router->execute(Request::fromCurrentRequest());
-        $response->send();
     }
 
     private function loadConfig($config_url)
@@ -63,12 +52,24 @@ class App
         }
     }
 
-    /**
-     * @return mixed
-     */
-    public function getModels()
-    {
-        return $this->models;
+    public function loadModule($modname){
+        /**
+         * @var $module Module
+         */
+        $module = new $modname($this);
+        $this->modules[$module->slug] = $module;
+    }
+
+    public function loadModel($model){
+        $this->models[] = $model;
+    }
+
+    public function run(){
+        // Run the initialze Module hook
+        $this->initialize();
+        // handle the request
+        $response = $this->router->execute(Request::fromCurrentRequest());
+        $response->send();
     }
 
     private function initialize()
@@ -79,6 +80,19 @@ class App
         foreach ($this->modules as $module){
             $module->initialize();
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModels()
+    {
+        return $this->models;
+    }
+
+    public function getUser(): User
+    {
+        return new User();
     }
 
 
