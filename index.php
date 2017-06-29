@@ -7,28 +7,10 @@
  */
 
 require "init.php";
-ini_set("display_errors",'1');
+ini_set("display_errors",1);
 //init app
 $app = new \awecms\App(CONFIG_URL);
 
+$app->loadModule("modules\\core\\Module");
 $app->loadModule("modules\\frontend\\Module");
-
-$app->router->get("/test/{test}/{lol}",function (\awecms\router\Request $request){
-    var_dump($request);
-});
-
-$app->router->post("/test/{test}/{lol}",function (\awecms\router\Request $request){
-    var_dump($request);
-});
-
-
-$app->router->put("/test/{test}/{lol}",function (\awecms\router\Request $request){
-    var_dump($request);
-});
-
-
-$app->router->delete("/test/{test}/{lol}",function (\awecms\router\Request $request){
-    var_dump($request);
-});
-
 $app->run();

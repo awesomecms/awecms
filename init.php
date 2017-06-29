@@ -6,10 +6,6 @@
  * Time: 20:52
  */
 
-require "vendor/autoload.php";
-
-error_reporting(E_ALL);
-
 define("CONFIG_URL","http://config.laur.me/v2/keys");
 define('CLASS_DIR', 'lib/');
 define('MODULES_DIR', 'modules/');

@@ -13,14 +13,13 @@ use awecms\App;
 use awecms\router\Request;
 use awecms\router\Response;
 
-abstract class RestModule extends Module
+abstract class RestModule extends APIModule
 {
 
     public $slug;
-    private $app;
 
     public function __construct(App $app) {
-        $this->app = $app;
+        parent::__construct($app);
         $this->app->router->get($this->slug, (array($this,"doGet")));
         $this->app->router->post($this->slug, (array($this,"doPost")));
         $this->app->router->put($this->slug, (array($this,"doPut")));

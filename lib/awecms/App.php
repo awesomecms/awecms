@@ -8,11 +8,9 @@
 
 namespace awecms;
 
-
 use awecms\module\Module;
 use awecms\router\Request;
 use awecms\router\Router;
-use GuzzleHttp\Psr7\ServerRequest;
 
 class App
 {
@@ -23,6 +21,7 @@ class App
 
     private $config;
     private $modules;
+    private $models;
 
     public function __construct($config_url)
     {
@@ -39,7 +38,13 @@ class App
         $this->modules[$module->slug] = $module;
     }
 
+    public function loadModel($model){
+        $this->models[] = $model;
+    }
     public function run(){
+        // Run the initialze Module hook
+        $this->initialize();
+        // handle the request
         $response = $this->router->execute(Request::fromCurrentRequest());
         $response->send();
     }
@@ -55,6 +60,24 @@ class App
             $this->config = $config;
         } else {
             throw new \ErrorException("config format not valid");
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModels()
+    {
+        return $this->models;
+    }
+
+    private function initialize()
+    {
+        /**
+         * @var $module Module
+         */
+        foreach ($this->modules as $module){
+            $module->initialize();
         }
     }
 

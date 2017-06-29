@@ -47,6 +47,11 @@ class FileStorageEngine extends StorageEngine
 
     public function query(array $params)
     {
-        // TODO: Implement query() method.
+        $res = [];
+        foreach (glob($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "data/" . $this->schema . "/*.json") as $file) {
+           $res[] = $this->getModel(basename($file,".json"));
+        }
+
+        return $res;
     }
 }

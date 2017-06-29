@@ -8,13 +8,17 @@
 
 namespace awecms\module;
 
+use awecms\App;
+
 abstract class Module {
 
    public $slug;
 
-    private function __construct() {
+   protected $app;
+    public function __construct(App $app) {
+        $this->app = $app;
     }
 
-
+    public function initialize(){}
 
 }

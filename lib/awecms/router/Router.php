@@ -15,13 +15,6 @@ class Router
 {
     private $routes = array();
 
-    public function __construct()
-    {
-    }
-
-    private function __clone()
-    {
-    }
 
     public function get($pattern, $callback){
         $this->route("get",$pattern, $callback);

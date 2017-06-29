@@ -9,33 +9,23 @@
 namespace modules\frontend;
 
 
-use awecms\module\RestModule;
+use awecms\App;
 use awecms\router\Request;
 use awecms\router\Response;
-use modules\frontend\models\Article;
 
-class Module extends RestModule {
+class Module extends \awecms\module\Module {
 
-    public $slug = "/frontend/{id}";
+    public $slug = "^/$";
 
-    public function doGet(Request $request, Response $response): Response
+    public function __construct(App $app)
     {
-        $response->setType(Response::TYPE_JSON)->setBody(array(array("yolo"=>"test"),array("yolo"=>"test")));
-        return $response;
+        parent::__construct($app);
+        $this->app->router->get($this->slug,array($this,"index"));
+        $this->app->loadModel("modules\\frontend\\models\\Article");
     }
 
-    public function doPost(Request $request, Response $response): Response
+    public function index(Request $request, Response $response): Response
     {
-        // TODO: Implement doPost() method.
-    }
-
-    public function doPut(Request $request, Response $response): Response
-    {
-        // TODO: Implement doPut() method.
-    }
-
-    public function doDelete(Request $request, Response $response): Response
-    {
-        // TODO: Implement doDelete() method.
+     return $response->setBody(file_get_contents($_SERVER["DOCUMENT_ROOT"]."/frontend/index.html"));
     }
 }

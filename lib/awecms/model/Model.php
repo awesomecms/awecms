@@ -58,6 +58,14 @@ abstract class Model {
         $this->fromArray($this->storageEngine->getModel($this->id));
     }
 
+    /**
+     * @return null
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
     private function getFields(){
         $res = [];
         $fields = (new ReflectionObject($this))->getProperties(ReflectionProperty::IS_PUBLIC);
@@ -90,6 +98,24 @@ abstract class Model {
         $class = new \ReflectionClass(get_called_class());
         $storageEngine->schema = strtolower($class->getShortName());
         $storageEngine->query(array("id"=>$id));
+    }
+
+    public static function getAll(){
+        $storageEngine = StorageEngine::getEngine(self::getEngine());
+        $class = new \ReflectionClass(get_called_class());
+        $storageEngine->schema = strtolower($class->getShortName());
+        $res = $storageEngine->query(array());
+        $list = [];
+        foreach ($res as $model){
+            /**
+             * @var $m Model
+             */
+            $class = get_called_class();
+            $m = new $class();
+            $m->fromArray($model);
+            $list[] = $m;
+        }
+        return $list;
     }
 
     private function fromArray($model){
