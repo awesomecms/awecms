@@ -21,16 +21,20 @@ use ReflectionProperty;
  * @package awecms\model
  */
 abstract class Model {
-
+    /**
+     * @var null
+     * @type primaryKey
+     */
     public $id;
     private $createMode;
     private $storageEngine;
+    private $class;
 
     public function __construct($id = null)
     {
         $this->storageEngine = StorageEngine::getEngine(self::getEngine());
-        $class = new \ReflectionClass(get_called_class());
-        $this->storageEngine->schema = strtolower($class->getShortName());
+        $this->class = new \ReflectionClass(get_called_class());
+        $this->storageEngine->schema = strtolower($this->class->getShortName());
         if ($id==null){
             $this->createMode = true;
         } else {
@@ -55,7 +59,9 @@ abstract class Model {
     {
 
         foreach ($model as $k => $v) {
-            $this->{$k} = $v;
+            if($this->class->hasProperty($k)){
+                $this->{$k} = $v;
+            }
         }
     }
 
@@ -115,11 +121,11 @@ abstract class Model {
         return json_encode($this->toArray());
     }
 
-    private function getFields(){
+    public static function getSchema(){
         $res = [];
-        $fields = (new ReflectionObject($this))->getProperties(ReflectionProperty::IS_PUBLIC);
+        $fields =  (new \ReflectionClass(get_called_class()))->getProperties(ReflectionProperty::IS_PUBLIC);
         foreach ($fields as $field) {
-            $res[strtolower($field->getDeclaringClass()->getShortName())][] = array(
+            $res[] = array(
               "name" => $field->getName(),
               "type" => Util::getDocProp('type',$field->getDocComment())
             );

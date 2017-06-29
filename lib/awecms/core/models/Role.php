@@ -19,8 +19,15 @@ use awecms\model\Model;
  */
 class Role extends Model
 {
-
+    /**
+     * @var
+     * @type string
+     */
     public $role_name;
+    /**
+     * @var
+     * @type string
+     */
     public $role_display_name;
 
 }

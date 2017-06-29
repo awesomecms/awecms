@@ -18,9 +18,24 @@ use awecms\model\Model;
  */
 class User extends Model
 {
-
+    /**
+     * @var
+     * @type string
+     */
     public $username;
+    /**
+     * @var
+     * @type string
+     */
     public $password;
+    /**
+     * @var
+     * @type string
+     */
     public $realname;
+    /**
+     * @var
+     * @type string
+     */
     public $email;
 }

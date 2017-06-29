@@ -6,9 +6,6 @@ services:
         dockerfile: Dockerfile
       volumes:
         - ./:/var/www/html
-      links:
-        - database:database
       ports:
-        - 80:80
-   database:
-      image: couchdb
+        - 8110:80
+

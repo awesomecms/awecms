@@ -59,9 +59,11 @@ class Module extends RestModule
              * @var $model Model
              */
             foreach ($res as $model) {
-                $json[] = array("id" => $model->getId());
+                $json[] = $model->toArray();
             }
 
+        } else if($request->getAttributes()["id"] == '_schema'){
+            $json = call_user_func(array($this->mapping[$model], "getSchema"));
         } else {
             $json = new $this->mapping[$model]($request->getAttributes()["id"]);
         }
@@ -82,6 +84,8 @@ class Module extends RestModule
         if (!$this->checkModel($request)) {
             return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
         }
+        $model = $request->getAttributes()["model"];
+
         /**
          * @var $model Model
          */
@@ -96,6 +100,8 @@ class Module extends RestModule
         if (!$this->checkModel($request)) {
             return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
         }
+        $model = $request->getAttributes()["model"];
+
         if (isset($request->getAttributes()["id"]) && $request->getAttributes()["id"] != "") {
             /**
              * @var $model Model
@@ -112,6 +118,8 @@ class Module extends RestModule
         if (!$this->checkModel($request)) {
             return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
         }
+        $model = $request->getAttributes()["model"];
+
         if (isset($request->getAttributes()["id"]) && $request->getAttributes()["id"] != "") {
             /**
              * @var $model Model
