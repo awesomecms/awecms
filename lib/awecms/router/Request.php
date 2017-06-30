@@ -34,6 +34,14 @@ class Request {
 
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
     static function fromCurrentRequest()
     {
         $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
@@ -64,6 +72,14 @@ class Request {
     }
 
     /**
+     * @return mixed
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    /**
      * @return array
      */
     public function getHeader(): array
@@ -77,14 +93,6 @@ class Request {
     public function getMethod()
     {
         return $this->method;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUri()
-    {
-        return $this->uri;
     }
 
     /**
@@ -106,26 +114,23 @@ class Request {
     /**
      * @return mixed
      */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-
-    public function setAttributes($attr){
-        $this->attributes = $attr;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getAttributes()
     {
         return $this->attributes;
     }
 
+    public function setAttributes($attr)
+    {
+        $this->attributes = $attr;
+    }
+
     public function getDecodedBody()
     {
         return json_decode($this->body,true);
+    }
+
+    public function getAttribute($string)
+    {
+        return $this->attributes[$string];
     }
 }

@@ -22,6 +22,8 @@ class Module extends RestModule
 
     public function __construct(App $app)
     {
+        $app->router->get("/model/_list", array($this, "listModels"));
+        $app->router->get("/model/{model}/_schema", array($this, "getSchema"));
         parent::__construct($app);
 
     }
@@ -35,6 +37,18 @@ class Module extends RestModule
         }
     }
 
+    public function listModels(Request $request, Response $response)
+    {
+        $json = array_keys($this->mapping);
+        return $response->setStatus(200)->setType(Response::TYPE_JSON)->setBody($json);
+    }
+
+
+    public function getSchema(Request $request, Response $response)
+    {
+        $json = call_user_func(array($this->mapping[$request->getAttribute("model")], "getSchema"));
+        return $response->setStatus(200)->setType(Response::TYPE_JSON)->setBody($json);
+    }
     /**
      * @param Request $request
      * @param Response $response
@@ -44,11 +58,6 @@ class Module extends RestModule
     {
 
         $json = [];
-        if ($request->getAttributes()["model"] == '_list') {
-            $json = array_keys($this->mapping);
-            return $response->setStatus(200)->setType(Response::TYPE_JSON)->setBody($json);
-
-        }
         if (!$this->checkModel($request)) {
             return $response->setStatus(404)->setType(Response::TYPE_JSON)->setBody(array("error" => "model not found"));
         }
@@ -62,8 +71,6 @@ class Module extends RestModule
                 $json[] = $model->toArray();
             }
 
-        } else if($request->getAttributes()["id"] == '_schema'){
-            $json = call_user_func(array($this->mapping[$model], "getSchema"));
         } else {
             $json = new $this->mapping[$model]($request->getAttributes()["id"]);
         }
