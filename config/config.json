@@ -1,0 +1,13 @@
+{
+  "name": "awecms",
+  "storage": {
+    "awecms\\storage\\FileStorageEngine": {
+    },
+    "MySQLStorageEngine": {
+      "host": "mysql",
+      "user": "root",
+      "password": "root",
+      "database": "awecms"
+    }
+  }
+}

@@ -8,4 +8,10 @@ services:
         - ./:/var/www/html
       ports:
         - 8110:80
-
+      links:
+        - mysql:mysql
+   mysql:
+      image: mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: awecms

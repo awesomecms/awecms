@@ -6,10 +6,10 @@
  * Time: 20:52
  */
 
-define("CONFIG_URL","http://config.laur.me/v2/keys");
+define("CONFIG_URL", "./config/config.json");
 define('CLASS_DIR', 'lib/');
 define('MODULES_DIR', 'modules/');
-
+session_start();
 // Add your class dir to include path
 set_include_path(__DIR__ . "/" . CLASS_DIR);
 set_include_path(__DIR__ . "/" . MODULES_DIR);

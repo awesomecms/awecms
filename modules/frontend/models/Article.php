@@ -13,7 +13,7 @@ use awecms\model\Model;
 
 /**
  * Class Article
- * @engine awecms\storage\FileStorageEngine
+ * @engine modules\mysqlengine\MySQLStorageEngine
  * @package modules\frontend\models
  */
 class Article extends Model {
@@ -30,6 +30,14 @@ class Article extends Model {
      * @type string
      */
     public $text;
+
+    public function __construct($id = null)
+    {
+        parent::__construct($id);
+        if ($id == null) {
+            $this->publishedAt = date("Y-m-d H:i:s");
+        }
+    }
 
     /**
      * @return mixed

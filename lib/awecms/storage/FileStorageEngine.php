@@ -13,7 +13,6 @@ use awecms\model\Model;
 
 class FileStorageEngine extends StorageEngine
 {
-
     public function createSchema()
     {
 
@@ -40,11 +39,6 @@ class FileStorageEngine extends StorageEngine
         unlink($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "data/" . $this->schema . "/" . $model["id"] . ".json");
     }
 
-    public function getModel($id): array
-    {
-        return json_decode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "data/" . $this->schema . "/" . $id . ".json"), true);
-    }
-
     public function query(array $params)
     {
         $res = [];
@@ -53,5 +47,10 @@ class FileStorageEngine extends StorageEngine
         }
 
         return $res;
+    }
+
+    public function getModel($id): array
+    {
+        return json_decode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "data/" . $this->schema . "/" . $id . ".json"), true);
     }
 }

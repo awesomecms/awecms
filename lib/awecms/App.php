@@ -8,6 +8,8 @@
 
 namespace awecms;
 
+use awecms\config\Config;
+use awecms\core\models\Session;
 use awecms\core\models\User;
 use awecms\module\Module;
 use awecms\router\Request;
@@ -40,16 +42,7 @@ class App
 
     private function loadConfig($config_url)
     {
-        $file = file_get_contents($config_url);
-        if ($file === false) {
-            throw new \ErrorException("config url not valid");
-        }
-        $config = json_decode($file);
-        if ($config !== false) {
-            $this->config = $config;
-        } else {
-            throw new \ErrorException("config format not valid");
-        }
+        $this->config = new Config($config_url);
     }
 
     public function loadModule($modname){
@@ -92,7 +85,7 @@ class App
 
     public function getUser(): User
     {
-        return new User();
+        return $this->user;
     }
 
 

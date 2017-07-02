@@ -25,6 +25,12 @@ abstract class Module {
 
     public function __construct(App $app) {
         $this->app = $app;
+
+    }
+
+    public function check(string $role)
+    {
+
     }
 
     public function initialize(){}

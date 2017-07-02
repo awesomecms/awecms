@@ -9,6 +9,7 @@
 namespace awecms\storage;
 
 
+use awecms\config\Config;
 use awecms\model\Model;
 
 /**
@@ -20,6 +21,12 @@ abstract class StorageEngine
 {
 
     public $schema;
+    protected $config;
+
+    function __construct()
+    {
+        $this->config = new Config(CONFIG_URL);
+    }
 
     static function getEngine($engine): StorageEngine
     {
